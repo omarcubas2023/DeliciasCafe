@@ -1,11 +1,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyCrMpZoFOG9UwIj4-fAOaIy4rFjkQj6OV4",
-    authDomain: "delicias-cafe.firebaseapp.com",
-    projectId: "delicias-cafe",
-    storageBucket: "delicias-cafe.firebasestorage.app",
-    messagingSenderId: "626971444926",
-    appId: "1:626971444926:web:642d6abf261bea7e6500ef"
+    apiKey: "AIzaSyAO3LKt1zEXAA_LSkmsSKPnvPlBd3J4GYI",
+    authDomain: "delicias-cafe-demo.firebaseapp.com",
+    projectId: "delicias-cafe-demo",
+    storageBucket: "delicias-cafe-demo.firebasestorage.app",
+    messagingSenderId: "541699625622",
+    appId: "1:541699625622:web:56776579b4a561dee3e8b7",
+    measurementId: "G-G54BRS6DPZ"
   }
 };
