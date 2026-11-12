@@ -1,0 +1,79 @@
+<!-- Hero de Especiales -->
+<section class="especiales-hero">
+  <h1>Especiales del Día</h1>
+  <p>Descubre nuestras delicias más populares preparadas con los mejores ingredientes</p>
+</section>
+
+<!-- Mensaje carrito -->
+<div class="mensaje-carrito" *ngIf="mensajeCarrito">
+  {{ mensajeCarrito }}
+</div>
+
+<!-- Grid de especiales -->
+<section class="especiales-section">
+  <div class="especiales-grid">
+    <div class="card" *ngFor="let item of especiales">
+
+      <!-- Imagen -->
+      <div class="card-img">
+        <img [src]="item.imagen" [alt]="item.nombre"
+            onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG'">
+        <div class="card-badge">Especial</div>
+      </div>
+
+      <!-- Info -->
+      <div class="card-body">
+        <div class="card-header">
+          <h3>{{ item.nombre }}</h3>
+          <span class="card-precio">S/ {{ item.precio.toFixed(2) }}</span>
+        </div>
+        <p class="card-categoria">{{ item.categoria }}</p>
+        <p class="card-desc">{{ item.descripcion }}</p>
+
+        <button class="btn-agregar" (click)="agregarAlCarrito(item)">
+          + Agregar al Carrito
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Delicias &amp; Café</h3>
+      <p>Tu restaurante de confianza en Lima, Perú. Ofreciendo los mejores sabores desde 2011.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Enlaces Rápidos</h4>
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/menu">Menú</a></li>
+        <li><a routerLink="/especiales">Especiales del Día</a></li>
+        <li><a routerLink="/login">Mi Cuenta</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Horario</h4>
+      <p><strong>Lunes - Viernes</strong></p>
+      <p>7:00 AM - 10:00 PM</p>
+      <p><strong>Sábado - Domingo</strong></p>
+      <p>9:30 AM - 11:00 PM</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>📍 Lima, Perú</p>
+      <p>📞 +51 123 456 789</p>
+      <p>✉ info@deliciascafe.pe</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Delicias &amp; Café SAC. Todos los derechos reservados.</p>
+    <div>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos y Condiciones</a>
+    </div>
+  </div>
+</footer>

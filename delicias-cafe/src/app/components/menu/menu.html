@@ -1,0 +1,111 @@
+<div class="menu-page">
+
+  <!-- Encabezado -->
+  <div class="menu-header">
+    <h1>Nuestro Menú</h1>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        [(ngModel)]="busqueda"
+        (input)="buscarProducto()"
+        placeholder="Buscar platillos..."
+        class="search-input"
+      />
+    </div>
+
+    <!-- Filtros por categoría -->
+    <div class="categorias">
+      <button
+        *ngFor="let cat of categorias"
+        [class.activo]="categoriaActiva === cat"
+        (click)="filtrarPorCategoria(cat)"
+        class="btn-categoria">
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Mensaje de carrito -->
+  <div class="mensaje-carrito" *ngIf="mensajeCarrito">
+    {{ mensajeCarrito }}
+  </div>
+
+  <!-- Grid de productos -->
+  <div class="productos-grid">
+    <div class="producto-card" *ngFor="let producto of productosFiltrados">
+
+      <!-- Imagen placeholder -->
+      <!-- Imagen real -->
+      <div class="producto-img">
+        <img [src]="producto.imagen" [alt]="producto.nombre"
+          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG'">
+      </div>
+
+      <!-- Info del producto -->
+      <div class="producto-body">
+        <div class="producto-header">
+          <h3>{{ producto.nombre }}</h3>
+          <span class="producto-precio">S/ {{ producto.precio.toFixed(2) }}</span>
+        </div>
+        <p class="producto-categoria">{{ producto.categoria }}</p>
+        <p class="producto-desc">{{ producto.descripcion }}</p>
+
+        <!-- Botón agregar -->
+        <button
+          class="btn-agregar"
+          (click)="agregarAlCarrito(producto)">
+          + Agregar al Carrito
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div class="sin-resultados" *ngIf="productosFiltrados.length === 0">
+    <p>No se encontraron productos.</p>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Delicias &amp; Café</h3>
+      <p>Tu restaurante de confianza en Lima, Perú. Ofreciendo los mejores sabores desde 2011.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Enlaces Rápidos</h4>
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/menu">Menú</a></li>
+        <li><a routerLink="/especiales">Especiales del Día</a></li>
+        <li><a routerLink="/login">Mi Cuenta</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Horario</h4>
+      <p><strong>Lunes - Viernes</strong></p>
+      <p>7:00 AM - 10:00 PM</p>
+      <p><strong>Sábado - Domingo</strong></p>
+      <p>9:30 AM - 11:00 PM</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>📍 Lima, Perú</p>
+      <p>📞 +51 123 456 789</p>
+      <p>✉ info@deliciascafe.pe</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Delicias &amp; Café SAC. Todos los derechos reservados.</p>
+    <div>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos y Condiciones</a>
+    </div>
+  </div>
+</footer>

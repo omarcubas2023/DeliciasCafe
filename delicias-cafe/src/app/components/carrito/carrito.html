@@ -1,0 +1,145 @@
+<div class="carrito-page">
+
+  <h1>Carrito de Compras</h1>
+
+  <!-- Mensajes -->
+  <div class="mensaje exito" *ngIf="mensaje && mensajeTipo === 'exito'">
+    {{ mensaje }}
+  </div>
+  <div class="mensaje error" *ngIf="mensaje && mensajeTipo === 'error'">
+    {{ mensaje }}
+  </div>
+
+  <!-- Items -->
+  <div class="carrito-contenido" *ngIf="items.length > 0">
+    <div class="carrito-items">
+      <div class="item" *ngFor="let item of items">
+        <div class="item-img">
+          <img [src]="item.producto.imagen" [alt]="item.producto.nombre"
+          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG'">
+        </div>
+        <div class="item-info">
+          <h3>{{ item.producto.nombre }}</h3>
+          <p>{{ item.producto.descripcion }}</p>
+          <span class="item-precio-unit">S/ {{ item.producto.precio.toFixed(2) }}</span>
+        </div>
+        <div class="item-cantidad">
+          <button (click)="cambiarCantidad(item.producto.id, item.cantidad - 1)">−</button>
+          <span>{{ item.cantidad }}</span>
+          <button (click)="cambiarCantidad(item.producto.id, item.cantidad + 1)">+</button>
+        </div>
+        <span class="item-subtotal">
+          S/ {{ (item.producto.precio * item.cantidad).toFixed(2) }}
+        </span>
+        <button class="btn-eliminar" (click)="eliminar(item.producto.id)">🗑</button>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="carrito-resumen">
+      <div class="total-row">
+        <span>Total:</span>
+        <strong>S/ {{ total.toFixed(2) }}</strong>
+      </div>
+      <div class="carrito-acciones">
+        <button class="btn-seguir" routerLink="/menu">Seguir Comprando</button>
+        <button class="btn-pedido" (click)="abrirModal()">Realizar Pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carrito vacío -->
+  <div class="carrito-vacio" *ngIf="items.length === 0 && !mensaje">
+    <span class="vacio-icon">🛒</span>
+    <h2>Tu carrito está vacío</h2>
+    <p>Agrega productos desde nuestro menú</p>
+    <button class="btn-ir-menu" routerLink="/menu">Ver el Menú</button>
+  </div>
+
+</div>
+
+<!-- ===== MODAL DE PAGO ===== -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <h2>¿Cómo deseas pagar?</h2>
+    <p class="modal-total">Total a pagar: <strong>S/ {{ total.toFixed(2) }}</strong></p>
+
+    <!-- Métodos de pago -->
+    <div class="metodos-grid">
+
+      <div class="metodo"
+        [class.seleccionado]="metodoPago === 'efectivo'"
+        (click)="seleccionarMetodo('efectivo')">
+        <span>Efectivo</span>
+      </div>
+
+      <div class="metodo"
+        [class.seleccionado]="metodoPago === 'tarjeta'"
+        (click)="seleccionarMetodo('tarjeta')">
+        <span>Tarjeta</span>
+      </div>
+
+      <div class="metodo"
+        [class.seleccionado]="metodoPago === 'yape'"
+        (click)="seleccionarMetodo('yape')">
+        <span>Yape</span>
+      </div>
+
+      <div class="metodo"
+        [class.seleccionado]="metodoPago === 'plin'"
+        (click)="seleccionarMetodo('plin')">
+        <span>Plin</span>
+      </div>
+
+    </div>
+
+    <!-- Botones -->
+    <div class="modal-acciones">
+      <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn-confirmar" (click)="confirmarPedido()" [disabled]="cargando">
+        {{ cargando ? 'Procesando...' : 'Confirmar Pedido' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>Delicias &amp; Café</h3>
+      <p>Tu restaurante de confianza en Lima, Perú. Ofreciendo los mejores sabores desde 2011.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Enlaces Rápidos</h4>
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/menu">Menú</a></li>
+        <li><a routerLink="/especiales">Especiales del Día</a></li>
+        <li><a routerLink="/login">Mi Cuenta</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Horario</h4>
+      <p><strong>Lunes - Viernes</strong></p>
+      <p>7:00 AM - 10:00 PM</p>
+      <p><strong>Sábado - Domingo</strong></p>
+      <p>9:30 AM - 11:00 PM</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>📍 Lima, Perú</p>
+      <p>📞 +51 123 456 789</p>
+      <p>✉ info@deliciascafe.pe</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Delicias &amp; Café SAC. Todos los derechos reservados.</p>
+    <div>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos y Condiciones</a>
+    </div>
+  </div>
+</footer>

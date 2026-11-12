@@ -1,0 +1,84 @@
+<div class="login-page">
+
+  <!-- PASO 1: Elegir tipo de acceso -->
+  <div class="selector-card" *ngIf="paso === 1">
+    <div class="selector-logo">
+      <h2>Delicias &amp; Café</h2>
+      <p>Selecciona tu tipo de acceso</p>
+    </div>
+
+    <div class="tipos-grid">
+      <!-- Cliente -->
+      <div class="tipo-card cliente" (click)="seleccionarTipo('cliente')">
+        <h3>Cliente</h3>
+        <p>Accede para ver el menú, realizar pedidos y gestionar tu cuenta</p>
+        <ul>
+          <li>✓ Ver menú y especiales</li>
+          <li>✓ Realizar pedidos</li>
+          <li>✓ Historial de compras</li>
+        </ul>
+      </div>
+
+      <!-- Trabajador -->
+      <div class="tipo-card trabajador" (click)="seleccionarTipo('trabajador')">
+        <h3>Trabajador</h3>
+        <p>Acceso para cajeros, meseros, cocineros y administradores</p>
+        <ul>
+          <li>✓ Gestionar menú y precios</li>
+          <li>✓ Administrar pedidos</li>
+          <li>✓ Modificar promociones</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2: Formulario de login -->
+  <div class="login-card" *ngIf="paso === 2">
+
+    <button class="btn-volver" (click)="volver()">← Cambiar tipo de acceso</button>
+
+    <div class="login-logo">
+      <h2>Delicias &amp; Café</h2>
+      <p>Inicia sesión como
+        <strong>{{ tipoAcceso === 'cliente' ? 'Cliente' : 'Trabajador' }}</strong>
+      </p>
+    </div>
+
+    <!-- Botón Google (solo para clientes) -->
+    <div class="google-section" *ngIf="tipoAcceso === 'cliente'">
+      <button class="btn-google" (click)="loginConGoogle()" [disabled]="cargandoGoogle">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"/>
+        {{ cargandoGoogle ? 'Conectando...' : 'Continuar con Google' }}
+      </button>
+      <div class="separador">
+        <span>o</span>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+    <!-- Formulario -->
+    <div class="form-group">
+      <label>Correo Electrónico</label>
+      <input type="email" [(ngModel)]="email"
+        placeholder="tu@email.com" class="input"/>
+    </div>
+
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" [(ngModel)]="password"
+        placeholder="••••••••" class="input"/>
+    </div>
+
+    <button class="btn-login" (click)="iniciarSesion()" [disabled]="cargando">
+      {{ cargando ? 'Iniciando...' : 'Iniciar Sesión' }}
+    </button>
+
+    <!-- Solo clientes pueden registrarse -->
+    <p class="registro-link" *ngIf="tipoAcceso === 'cliente'">
+      ¿No tienes cuenta? <a routerLink="/registro">Regístrate</a>
+    </p>
+
+  </div>
+</div>

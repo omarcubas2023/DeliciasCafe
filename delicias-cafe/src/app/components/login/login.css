@@ -1,0 +1,275 @@
+/* ===== LOGIN PAGE ===== */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3D1C02 0%, #7B4A1E 50%, #C8860A 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* PASO 1 — Selector */
+.selector-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.selector-logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.selector-logo h2 {
+  color: #3D1C02;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 6px 0;
+  font-family: Georgia, serif;
+}
+
+.selector-logo p {
+  color: #8B6914;
+  font-size: 15px;
+  margin: 0;
+}
+
+.tipos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.tipo-card {
+  border-radius: 12px;
+  padding: 28px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.tipo-card:hover {
+  transform: translateY(-4px);
+}
+
+.tipo-card.cliente {
+  background: #FFF8F0;
+  border: 2px solid #E0D0C0;
+}
+
+.tipo-card.trabajador {
+  background: #3D1C02;
+  border: 2px solid #3D1C02;
+  color: white;
+}
+
+.tipo-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.tipo-card h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.tipo-card.cliente h3 { color: #3D1C02; }
+.tipo-card.trabajador h3 { color: white; }
+
+.tipo-card p {
+  font-size: 13px;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.tipo-card.cliente p { color: #8B6914; }
+.tipo-card.trabajador p { color: #D4B896; }
+
+.tipo-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tipo-card ul li {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.tipo-card.cliente ul li { color: #8B6914; }
+.tipo-card.trabajador ul li { color: #C8860A; }
+
+/* PASO 2 — Login */
+.login-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.btn-volver {
+  background: none;
+  border: none;
+  color: #8B6914;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.btn-volver:hover { text-decoration: underline; }
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-logo h2 {
+  color: #3D1C02;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 6px 0;
+  font-family: Georgia, serif;
+}
+
+.login-logo p {
+  color: #8B6914;
+  font-size: 14px;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #8B6914;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #E0D0C0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #FAF7F4;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #C8860A;
+  background: white;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background-color: #6B3A2A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.btn-login:hover { background-color: #8B4513; }
+.btn-login:disabled { background-color: #ccc; cursor: not-allowed; }
+
+.error-msg {
+  background: #fde8e8;
+  color: #c0392b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.registro-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.registro-link a {
+  color: #8B6914;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Botón Google */
+.google-section {
+  margin-bottom: 20px;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #E0D0C0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.btn-google:hover {
+  background: #f5f5f5;
+}
+
+.btn-google:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-google img {
+  width: 20px;
+  height: 20px;
+}
+
+.separador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.separador::before,
+.separador::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E0D0C0;
+}
+
+.registro-link a:hover { text-decoration: underline; }

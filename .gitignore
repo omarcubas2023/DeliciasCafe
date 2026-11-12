@@ -26,3 +26,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local tooling and generated files
+.vscode/
+.github/modernize/
+**/node_modules/
+**/target/
+**/dist/
+**/.angular/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

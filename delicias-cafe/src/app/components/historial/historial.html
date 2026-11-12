@@ -1,0 +1,88 @@
+<div class="historial-page">
+
+  <div class="historial-header">
+    <h1>Mis Pedidos</h1>
+    <p>Revisa el historial de tus compras y recibos</p>
+  </div>
+
+  <!-- Cargando -->
+  <div class="estado-vacio" *ngIf="cargando">
+    <p>Cargando tu historial...</p>
+  </div>
+
+  <!-- Sin pedidos -->
+  <div class="estado-vacio" *ngIf="!cargando && pedidos.length === 0">
+    <h2>Aún no tienes pedidos</h2>
+    <p>Cuando realices una compra aparecerá aquí</p>
+    <button class="btn-ir-menu" routerLink="/menu">Ver el Menú</button>
+  </div>
+
+  <!-- Lista de pedidos -->
+  <div class="pedidos-lista" *ngIf="!cargando && pedidos.length > 0">
+    <div class="pedido-item" *ngFor="let pedido of pedidos">
+
+      <!-- Encabezado del pedido (clic para expandir) -->
+      <div class="pedido-resumen" (click)="toggleExpandir(pedido.id)">
+        <div class="pedido-resumen-izq">
+          <div>
+            <h3>Pedido #{{ pedido.id }}</h3>
+            <p>{{ pedido.fechaPedido | date:'dd/MM/yyyy, hh:mm a' }}</p>
+          </div>
+        </div>
+        <div class="pedido-resumen-der">
+          <span class="badge-estado" [class]="'estado-' + pedido.estado">
+            {{ pedido.estado }}
+          </span>
+          <strong>S/ {{ pedido.total.toFixed ? pedido.total.toFixed(2) : pedido.total }}</strong>
+          <span class="flecha">{{ pedidoExpandido === pedido.id ? '▲' : '▼' }}</span>
+        </div>
+      </div>
+
+      <!-- Detalle / Recibo expandible -->
+      <div class="recibo" *ngIf="pedidoExpandido === pedido.id">
+        <div class="recibo-card">
+
+          <div class="recibo-titulo">
+            <span>Delicias &amp; Café</span>
+            <span class="recibo-subtitulo">Comprobante de Pedido</span>
+          </div>
+
+          <div class="recibo-info">
+            <span>Pedido #{{ pedido.id }}</span>
+            <span>{{ pedido.fechaPedido | date:'dd/MM/yyyy hh:mm a' }}</span>
+          </div>
+
+          <div class="recibo-linea"></div>
+
+          <div class="recibo-items">
+            <div class="recibo-item" *ngFor="let item of pedido.items">
+              <span class="item-cant">{{ item.cantidad }}x</span>
+              <span class="item-nombre">{{ item.nombreProducto }}</span>
+              <span class="item-precio">
+                S/ {{ (item.precioUnitario * item.cantidad).toFixed(2) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="recibo-linea"></div>
+
+          <div class="recibo-total">
+            <span>Total</span>
+            <strong>S/ {{ pedido.total.toFixed ? pedido.total.toFixed(2) : pedido.total }}</strong>
+          </div>
+
+          <div class="recibo-metodo">
+            Pagado con {{ pedido.metodoPago }}
+          </div>
+
+          <button class="btn-imprimir" (click)="imprimirRecibo(pedido)">
+            Imprimir Recibo
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

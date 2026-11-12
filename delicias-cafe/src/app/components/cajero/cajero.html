@@ -1,0 +1,262 @@
+<div class="panel-page">
+  <div class="panel-header">
+    <div>
+      <h1>Panel de Caja</h1>
+      <p>Gestiona los pagos del restaurante</p>
+    </div>
+    <div class="ganancias-badge">
+      <span>Ganancias del día</span>
+      <strong>S/ {{ gananciasDia.toFixed(2) }}</strong>
+    </div>
+  </div>
+
+  <!-- Notificación flotante -->
+  <div class="notificacion exito" *ngIf="mensaje && mensajeTipo === 'exito'">
+    {{ mensaje }}
+  </div>
+  <div class="notificacion error" *ngIf="mensaje && mensajeTipo === 'error'">
+    {{ mensaje }}
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button [class.activo]="vistaActiva === 'pedidos'"
+      (click)="vistaActiva = 'pedidos'">Pedidos del día</button>
+    <button [class.activo]="vistaActiva === 'ganancias'"
+      (click)="vistaActiva = 'ganancias'">Resumen</button>
+    <button [class.activo]="vistaActiva === 'auditoria'"
+      (click)="vistaActiva = 'auditoria'; cargarAuditoria()">Auditoría de Pagos</button>
+  </div>
+
+  <!-- Vista pedidos -->
+  <div class="tabla-container" *ngIf="vistaActiva === 'pedidos'">
+    <div class="pedido-vacio" *ngIf="pedidos.length === 0">
+      <p>No hay pedidos registrados aún.</p>
+    </div>
+    <table class="tabla" *ngIf="pedidos.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Método</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidos">
+          <td>#{{ pedido.id }}</td>
+          <td>{{ pedido.nombreCliente || 'Cliente' }}</td>
+          <td>S/ {{ pedido.total }}</td>
+          <td>{{ pedido.metodoPago }}</td>
+          <td>
+            <span class="badge"
+              [class.pagado]="pedido.estado === 'pagado'"
+              [class.pendiente]="pedido.estado === 'pendiente'"
+              [class.cancelado]="pedido.estado === 'cancelado'">
+              {{ pedido.estado }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-pagar"
+              *ngIf="pedido.estado === 'pendiente'"
+              (click)="abrirModalPago(pedido)">
+              Registrar Pago
+            </button>
+            <button class="btn-cancelar"
+              *ngIf="pedido.estado !== 'cancelado'"
+              (click)="cancelarPedido(pedido)">
+              Cancelar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vista resumen -->
+  <div class="resumen-card" *ngIf="vistaActiva === 'ganancias'">
+    <h2>Resumen del día</h2>
+    <div class="resumen-grid">
+      <div class="resumen-item">
+        <span>Total pedidos</span>
+        <strong>{{ pedidos.length }}</strong>
+      </div>
+      <div class="resumen-item">
+        <span>Pedidos pagados</span>
+        <strong>{{ pedidosPagados }}</strong>
+      </div>
+      <div class="resumen-item">
+        <span>Ganancias totales</span>
+        <strong>S/ {{ gananciasDia.toFixed(2) }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista auditoría -->
+  <div *ngIf="vistaActiva === 'auditoria'">
+    <div class="auditoria-resumen">
+      <div class="metodo-card">
+        <span>Efectivo</span>
+        <strong>S/ {{ totalEfectivo.toFixed(2) }}</strong>
+      </div>
+      <div class="metodo-card">
+        <span>Tarjeta</span>
+        <strong>S/ {{ totalTarjeta.toFixed(2) }}</strong>
+      </div>
+      <div class="metodo-card">
+        <span>Yape</span>
+        <strong>S/ {{ totalYape.toFixed(2) }}</strong>
+      </div>
+      <div class="metodo-card">
+        <span>Plin</span>
+        <strong>S/ {{ totalPlin.toFixed(2) }}</strong>
+      </div>
+      <div class="metodo-card total">
+        <span>Total General</span>
+        <strong>S/ {{ totalAuditoria.toFixed(2) }}</strong>
+      </div>
+    </div>
+
+    <div class="auditoria-lista">
+      <div class="auditoria-vacio" *ngIf="auditoria.length === 0">
+        <p>No hay pagos registrados aún.</p>
+      </div>
+      <div class="auditoria-item" *ngFor="let pedido of auditoria">
+        <div class="auditoria-resumen-fila" (click)="toggleAuditoria(pedido.id)">
+          <div class="auditoria-izq">
+            <div>
+              <h3>Pedido #{{ pedido.id }}</h3>
+              <p>{{ pedido.fechaPedido | date:'dd/MM/yyyy, hh:mm a' }}</p>
+            </div>
+          </div>
+          <div class="auditoria-der">
+            <span class="badge-metodo">{{ pedido.metodoPago }}</span>
+            <span class="badge-estado" [class]="'estado-' + pedido.estado">
+              {{ pedido.estado }}
+            </span>
+            <strong>S/ {{ pedido.total.toFixed ? pedido.total.toFixed(2) : pedido.total }}</strong>
+            <span class="flecha">{{ auditoriaExpandida === pedido.id ? '▲' : '▼' }}</span>
+          </div>
+        </div>
+        <div class="auditoria-detalle" *ngIf="auditoriaExpandida === pedido.id">
+          <div class="detalle-item" *ngFor="let item of pedido.items">
+            <span class="item-cant">{{ item.cantidad }}x</span>
+            <span class="item-nombre">{{ item.nombreProducto }}</span>
+            <span class="item-precio">
+              S/ {{ (item.precioUnitario * item.cantidad).toFixed(2) }}
+            </span>
+          </div>
+          <div class="detalle-pago">
+            Pagado con <strong>{{ pedido.metodoPago }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL MÉTODO DE PAGO ===== -->
+<div class="modal-overlay" *ngIf="mostrarModalPago" (click)="cerrarModalPago()">
+  <div class="modal-pago" (click)="$event.stopPropagation()">
+
+    <!-- PASO 1: Elegir método de pago -->
+    <div *ngIf="!mostrarVentanaCambio">
+      <h2>¿Cómo paga el cliente?</h2>
+      <p class="modal-subtitulo">
+        Total del pedido #{{ pedidoSeleccionado?.id }}:
+        <strong>S/ {{ pedidoSeleccionado?.total }}</strong>
+      </p>
+      <p class="modal-nota">
+        Puedes mantener el método original o cambiarlo según lo que indique el cliente.
+      </p>
+
+      <div class="metodos-grid">
+        <div class="metodo-opcion"
+          [class.seleccionado]="metodoPagoSeleccionado === 'efectivo'"
+          (click)="metodoPagoSeleccionado = 'efectivo'">
+          Efectivo
+        </div>
+        <div class="metodo-opcion"
+          [class.seleccionado]="metodoPagoSeleccionado === 'tarjeta'"
+          (click)="metodoPagoSeleccionado = 'tarjeta'">
+          Tarjeta
+        </div>
+        <div class="metodo-opcion"
+          [class.seleccionado]="metodoPagoSeleccionado === 'yape'"
+          (click)="metodoPagoSeleccionado = 'yape'">
+          Yape
+        </div>
+        <div class="metodo-opcion"
+          [class.seleccionado]="metodoPagoSeleccionado === 'plin'"
+          (click)="metodoPagoSeleccionado = 'plin'">
+          Plin
+        </div>
+      </div>
+
+      <div class="modal-acciones">
+        <button class="btn-cancelar-modal" (click)="cerrarModalPago()">Cancelar</button>
+        <button class="btn-confirmar-modal" (click)="confirmarMetodoPago()">
+          Continuar
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 2: Solo si es efectivo — calcular cambio -->
+    <div *ngIf="mostrarVentanaCambio">
+      <h2>Pago en Efectivo</h2>
+      <p class="modal-subtitulo">
+        Total a cobrar: <strong>S/ {{ pedidoSeleccionado?.total }}</strong>
+      </p>
+
+      <div class="cambio-form">
+        <label>¿Cuánto entrega el cliente?</label>
+        <div class="input-soles">
+          <span>S/</span>
+          <input
+            type="number"
+            [(ngModel)]="montoPagadoCliente"
+            placeholder="0.00"
+            min="0"
+            step="0.50"
+          />
+        </div>
+
+        <!-- Muestra el cambio en tiempo real -->
+        <div class="cambio-resultado" *ngIf="montoPagadoCliente > 0">
+          <div class="cambio-fila">
+            <span>Entrega el cliente:</span>
+            <strong>S/ {{ montoPagadoCliente.toFixed(2) }}</strong>
+          </div>
+          <div class="cambio-fila">
+            <span>Total del pedido:</span>
+            <strong>S/ {{ (+pedidoSeleccionado?.total).toFixed(2) }}</strong>
+          </div>
+          <div class="cambio-fila cambio-destacado"
+            [class.cambio-positivo]="cambioCliente > 0"
+            [class.cambio-negativo]="montoPagadoCliente < +pedidoSeleccionado?.total">
+            <span>{{ cambioCliente > 0 ? 'Cambio a devolver:' : 'Monto insuficiente:' }}</span>
+            <strong>
+              S/ {{ cambioCliente > 0 ? cambioCliente.toFixed(2) :
+              (+pedidoSeleccionado?.total - montoPagadoCliente).toFixed(2) }}
+            </strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-acciones">
+        <button class="btn-cancelar-modal"
+          (click)="mostrarVentanaCambio = false">
+          Volver
+        </button>
+        <button class="btn-confirmar-modal"
+          (click)="confirmarPagoEfectivo()"
+          [disabled]="montoPagadoCliente < +pedidoSeleccionado?.total">
+          Confirmar Pago
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

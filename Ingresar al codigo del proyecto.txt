@@ -1,0 +1,27 @@
+Microsoft Windows [Versión 10.0.26200.8246]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+C:\Users\jcall> cd C:\Users\jcall\OneDrive\Documentos\Sergio trabajos\UPN\Ciclo 7\Soluciones web y apli. dist\Codigo del proyecto\delicias-cafe
+
+C:\Users\jcall\OneDrive\Documentos\Sergio trabajos\UPN\Ciclo 7\Soluciones web y apli. dist\Codigo del proyecto\delicias-cafe>code .
+
+C:\Users\jcall\OneDrive\Documentos\Sergio trabajos\UPN\Ciclo 7\Soluciones web y apli. dist\Codigo del proyecto\delicias-cafe>ng serve
+Initial chunk files | Names         | Raw size
+main.js             | main          |  4.63 kB |
+styles.css          | styles        | 95 bytes |
+
+                    | Initial total |  4.72 kB
+
+Lazy chunk files    | Names         | Raw size
+chunk-2CP46VW7.js   | especiales    |  1.82 kB |
+chunk-CIKSI67S.js   | carrito       |  1.74 kB |
+chunk-5ZOROQWM.js   | login         |  1.69 kB |
+chunk-EJSVY3OL.js   | home          |  1.67 kB |
+chunk-YOWJAG57.js   | menu          |  1.67 kB |
+
+Application bundle generation complete. [3.751 seconds] - 2026-05-11T05:18:55.504Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4200/
+  ➜  press h + enter to show help

@@ -1,0 +1,49 @@
+<div class="panel-page">
+  <div class="panel-header">
+    <div>
+      <h1>Panel de Cocina</h1>
+      <p>Gestiona los pedidos en preparación</p>
+    </div>
+  </div>
+
+  <div class="mensaje exito" *ngIf="mensaje && mensajeTipo === 'exito'">{{ mensaje }}</div>
+  <div class="mensaje error" *ngIf="mensaje && mensajeTipo === 'error'">{{ mensaje }}</div>
+
+  <div class="pedidos-grid">
+    <div class="pedido-vacio" *ngIf="pedidos.length === 0">
+      <span>👨‍🍳</span>
+      <p>No hay pedidos en cocina aún.</p>
+    </div>
+
+    <div class="pedido-card" *ngFor="let pedido of pedidos"
+      [class.cocinando]="pedido.estadoCocina === 'cocinando'"
+      [class.listo]="pedido.estadoCocina === 'listo'">
+
+      <div class="pedido-card-header">
+        <h3>Pedido #{{ pedido.id }}</h3>
+        <span class="estado-cocina">
+          {{ pedido.estadoCocina === 'cocinando' ? 'Cocinando' :
+             pedido.estadoCocina === 'listo' ? 'Listo' : 'En espera' }}
+        </span>
+      </div>
+
+      <p class="pedido-total">Total: <strong>S/ {{ pedido.total }}</strong></p>
+
+      <div class="pedido-acciones">
+        <button class="btn-cocinando"
+          *ngIf="!pedido.estadoCocina"
+          (click)="marcarCocinando(pedido)">
+          Comenzar a cocinar
+        </button>
+        <button class="btn-listo"
+          *ngIf="pedido.estadoCocina === 'cocinando'"
+          (click)="marcarListo(pedido)">
+          Plato listo
+        </button>
+        <span class="listo-msg" *ngIf="pedido.estadoCocina === 'listo'">
+          Listo para servir
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<nav class="navbar">
+  <!-- Logo -->
+  <div class="navbar-logo" routerLink="/">
+    <span class="logo-text">Delicias &amp; Café</span>
+  </div>
+
+  <!-- Links de navegación -->
+  <ul class="navbar-links">
+    <li>
+      <a routerLink="/" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}">
+        Inicio
+      </a>
+    </li>
+    <li>
+      <a routerLink="/menu" routerLinkActive="active">
+        Menú
+      </a>
+    </li>
+    <li>
+      <a routerLink="/especiales" routerLinkActive="active">
+        Especiales
+      </a>
+    </li>
+
+    <!-- Solo visible para administrador -->
+    <li *ngIf="rolUsuario === 'administrador'">
+      <a routerLink="/admin" routerLinkActive="active" class="link-admin">
+        Administración
+      </a>
+    </li>
+
+    <!-- Solo visible para cajero -->
+    <li *ngIf="rolUsuario === 'cajero'">
+      <a routerLink="/cajero" routerLinkActive="active" class="link-empleado">
+        Caja
+      </a>
+    </li>
+
+    <!-- Solo visible para mesero -->
+    <li *ngIf="rolUsuario === 'mesero'">
+      <a routerLink="/mesero" routerLinkActive="active" class="link-empleado">
+        Pedidos
+      </a>
+    </li>
+
+    <!-- Solo visible para cocinero -->
+    <li *ngIf="rolUsuario === 'cocinero'">
+      <a routerLink="/cocina" routerLinkActive="active" class="link-empleado">
+        Cocina
+      </a>
+    </li>
+
+    <!-- Carrito solo para clientes -->
+    <li *ngIf="rolUsuario === 'cliente'">
+      <a routerLink="/historial" routerLinkActive="active">
+        Mis Pedidos
+      </a>
+    </li>
+    
+    <li class="carrito-link" *ngIf="rolUsuario === 'cliente' || rolUsuario === ''">
+      <a routerLink="/carrito" routerLinkActive="active">
+        Carrito
+        <span class="badge" *ngIf="cantidadCarrito > 0">
+          {{ cantidadCarrito }}
+        </span>
+      </a>
+    </li>
+
+    <!-- Usuario logueado -->
+    <li *ngIf="estaLogueado">
+      <a class="usuario-nombre"> {{ usuarioNombre }}</a>
+    </li>
+    <li *ngIf="estaLogueado">
+      <a class="btn-logout" (click)="cerrarSesion()">Cerrar sesion</a>
+    </li>
+
+    <!-- No logueado -->
+    <li *ngIf="!estaLogueado">
+      <a routerLink="/login" routerLinkActive="active">
+        Iniciar Sesión
+      </a>
+    </li>
+  </ul>
+</nav>

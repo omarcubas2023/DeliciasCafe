@@ -1,0 +1,236 @@
+.historial-page {
+  background: #FFF8F0;
+  min-height: 100vh;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.historial-header {
+  margin-bottom: 28px;
+}
+
+.historial-header h1 {
+  font-size: 28px;
+  color: #3D1C02;
+  font-family: Georgia, serif;
+  margin: 0 0 4px 0;
+}
+
+.historial-header p {
+  color: #8B6914;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Estado vacío */
+.estado-vacio {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.vacio-icon {
+  font-size: 56px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.estado-vacio h2 {
+  color: #3D1C02;
+  font-size: 22px;
+  margin: 0 0 8px 0;
+}
+
+.estado-vacio p {
+  color: #888;
+  margin: 0 0 24px 0;
+}
+
+.btn-ir-menu {
+  background: #6B3A2A;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-ir-menu:hover { background: #8B4513; }
+
+/* Lista de pedidos */
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pedido-item {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.pedido-resumen {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pedido-resumen:hover { background: #FFFAF5; }
+
+.pedido-resumen-izq {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pedido-fecha-icon { font-size: 26px; }
+
+.pedido-resumen-izq h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #3D1C02;
+}
+
+.pedido-resumen-izq p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: #999;
+}
+
+.pedido-resumen-der {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pedido-resumen-der strong {
+  color: #3D1C02;
+  font-size: 16px;
+}
+
+.flecha {
+  color: #C8860A;
+  font-size: 12px;
+}
+
+.badge-estado {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.estado-pendiente { background: #fff3cd; color: #856404; }
+.estado-pagado { background: #cce5ff; color: #004085; }
+.estado-en_cocina { background: #ffe5cc; color: #a35200; }
+.estado-listo { background: #d4edda; color: #155724; }
+.estado-entregado { background: #e2e3e5; color: #383d41; }
+.estado-cancelado { background: #fde8e8; color: #c0392b; }
+
+/* Recibo */
+.recibo {
+  background: #FAF7F4;
+  padding: 0 22px 22px 22px;
+}
+
+.recibo-card {
+  background: white;
+  border-radius: 10px;
+  padding: 24px;
+  border: 1px dashed #D0B090;
+}
+
+.recibo-titulo {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.recibo-titulo span:first-child {
+  display: block;
+  font-size: 17px;
+  font-weight: bold;
+  color: #3D1C02;
+}
+
+.recibo-subtitulo {
+  display: block;
+  font-size: 12px;
+  color: #8B6914;
+  margin-top: 2px;
+}
+
+.recibo-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+}
+
+.recibo-linea {
+  border-top: 1px dashed #D0B090;
+  margin: 14px 0;
+}
+
+.recibo-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recibo-item {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+}
+
+.item-cant { color: #8B6914; font-weight: bold; }
+.item-precio { color: #3D1C02; font-weight: bold; }
+
+.recibo-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  color: #3D1C02;
+}
+
+.recibo-total strong { font-size: 20px; }
+
+.recibo-metodo {
+  text-align: center;
+  font-size: 13px;
+  color: #8B6914;
+  margin-top: 12px;
+  text-transform: capitalize;
+}
+
+.btn-imprimir {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid #D0B090;
+  border-radius: 8px;
+  background: white;
+  color: #3D1C02;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-imprimir:hover { background: #FFF0E0; }
+
+@media print {
+  .historial-header, .pedido-resumen, .btn-imprimir { display: none; }
+  .recibo { background: white; padding: 0; }
+}

@@ -1,0 +1,114 @@
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Delicias & Café</h1>
+    <p class="hero-sub">Tu restaurante de confianza en Lima, Perú</p>
+    <p class="hero-desc">
+      Ofrecemos los mejores sabores desde 2011. Ven y disfruta de nuestra
+      carta con ingredientes frescos y preparados con amor.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn-primary" routerLink="/menu">Ver Menú</button>
+      <button class="btn-secondary" routerLink="/especiales">Especiales del Día</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ESPECIALES DEL DÍA ===== -->
+<section class="especiales">
+  <h2>Especiales del Día</h2>
+  <p class="section-sub">Descubre nuestras delicias más populares</p>
+  <div class="especiales-grid">
+    <div class="card" *ngFor="let item of especiales">
+      <div class="card-img-placeholder">
+        <img [src]="item.imagen" [alt]="item.nombre"
+          onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG'">
+      </div>
+      <div class="card-body">
+        <h3>{{ item.nombre }}</h3>
+        <p class="card-categoria">{{ item.categoria }}</p>
+        <p class="card-desc">{{ item.descripcion }}</p>
+        <div class="card-footer">
+          <span class="card-precio">S/ {{ item.precio.toFixed(2) }}</span>
+          <button class="btn-agregar" routerLink="/menu">Ver Menú</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VISÍTANOS ===== -->
+<section class="visitanos">
+  <h2>Visítanos</h2>
+  <p>Estamos abiertos todos los días para servirte los mejores platillos</p>
+
+  <div class="visitanos-cards">
+    <div class="info-card">
+      <div>
+        <span class="info-label">UBICACIÓN</span>
+        <h3>Lima, Perú</h3>
+        <p>Nos encontramos en el corazón de Lima, listos para recibirte con los brazos abiertos</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div>
+        <span class="info-label">HORARIO</span>
+        <h3>Lun-Vie: 7:00 AM - 10:00 PM</h3>
+        <p>Sáb-Dom: 9:30 AM - 11:00 PM</p>
+        <p>Abierto toda la semana para tu comodidad</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-ordena" routerLink="/menu">Ordena Ahora</button>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <div class="footer-col">
+      <h3>Delicias & Café</h3>
+      <p>Tu restaurante de confianza en Lima, Perú. Ofreciendo los mejores sabores desde 2011.</p>
+      <div class="social-links">
+        <span>f</span>
+        <span>📷</span>
+        <span>🐦</span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Enlaces Rápidos</h4>
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/menu">Menú</a></li>
+        <li><a routerLink="/especiales">Especiales del Día</a></li>
+        <li><a routerLink="/login">Mi Cuenta</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Horario</h4>
+      <p><strong>Lunes - Viernes</strong></p>
+      <p>7:00 AM - 10:00 PM</p>
+      <p><strong>Sábado - Domingo</strong></p>
+      <p>9:30 AM - 11:00 PM</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>📍 Lima, Perú</p>
+      <p>📞 +51 123 456 789</p>
+      <p>✉ info@deliciascafe.pe</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Delicias & Café SAC. Todos los derechos reservados.</p>
+    <div>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos y Condiciones</a>
+    </div>
+  </div>
+</footer>

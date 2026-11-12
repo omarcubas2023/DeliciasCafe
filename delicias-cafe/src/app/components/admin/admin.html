@@ -1,0 +1,136 @@
+<div class="admin-page">
+
+  <div class="admin-header">
+    <div>
+      <h1>Panel de Administración</h1>
+      <p>Gestiona el menú del restaurante</p>
+    </div>
+    <div class="header-acciones">
+      <button class="btn-tab" [class.activo]="vistaActiva === 'menu'"
+        (click)="vistaActiva = 'menu'; mostrarFormulario = false">
+        Menú
+      </button>
+      <button class="btn-tab" [class.activo]="vistaActiva === 'logs'"
+        (click)="vistaActiva = 'logs'; cargarLogs()">
+        Actividad
+      </button>
+      <button class="btn-agregar-nuevo"
+        *ngIf="vistaActiva === 'menu'"
+        (click)="mostrarFormulario = !mostrarFormulario">
+        {{ mostrarFormulario ? '✕ Cancelar' : '+ Agregar Producto' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="mensaje exito" *ngIf="mensaje && mensajeTipo === 'exito'">{{ mensaje }}</div>
+  <div class="mensaje error" *ngIf="mensaje && mensajeTipo === 'error'">{{ mensaje }}</div>
+
+  <!-- Vista Menú -->
+  <div *ngIf="vistaActiva === 'menu'">
+    <!-- Formulario nuevo producto -->
+    <div class="formulario-card" *ngIf="mostrarFormulario">
+      <h2>Nuevo Producto</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="nuevoProducto.nombre" placeholder="Nombre del producto"/>
+        </div>
+        <div class="form-group">
+          <label>Precio (S/)</label>
+          <input type="number" [(ngModel)]="nuevoProducto.precio" placeholder="0.00"/>
+        </div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select [(ngModel)]="nuevoProducto.categoria">
+            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>URL de Imagen</label>
+          <input type="text" [(ngModel)]="nuevoProducto.imagen" placeholder="https://..."/>
+        </div>
+        <div class="form-group full-width">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="nuevoProducto.descripcion" placeholder="Descripción"></textarea>
+        </div>
+      </div>
+      <button class="btn-guardar" (click)="agregarProducto()">Guardar Producto</button>
+    </div>
+
+    <!-- Tabla productos -->
+    <div class="tabla-container">
+      <table class="tabla-productos">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of productos">
+            <ng-container *ngIf="productoEditando?.id === producto.id">
+              <td><img [src]="productoEditando.imagen" class="tabla-img"/></td>
+              <td><input class="input-edit" [(ngModel)]="productoEditando.nombre"/></td>
+              <td>
+                <select class="input-edit" [(ngModel)]="productoEditando.categoria">
+                  <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+                </select>
+              </td>
+              <td><input class="input-edit" type="number" [(ngModel)]="productoEditando.precio"/></td>
+              <td><textarea class="input-edit" [(ngModel)]="productoEditando.descripcion"></textarea></td>
+              <td>
+                <button class="btn-save" (click)="guardarEdicion()">💾</button>
+                <button class="btn-cancel" (click)="cancelarEdicion()">✕</button>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="productoEditando?.id !== producto.id">
+              <td><img [src]="producto.imagen" class="tabla-img" [alt]="producto.nombre"/></td>
+              <td>{{ producto.nombre }}</td>
+              <td><span class="badge-categoria">{{ producto.categoria }}</span></td>
+              <td>S/ {{ producto.precio.toFixed(2) }}</td>
+              <td class="desc-cell">{{ producto.descripcion }}</td>
+              <td>
+                <button class="btn-edit" (click)="editarProducto(producto)">✏️</button>
+                <button class="btn-delete" (click)="eliminarProducto(producto)">🗑️</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Vista Logs -->
+  <div *ngIf="vistaActiva === 'logs'">
+    <div class="tabla-container">
+      <table class="tabla-productos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs">
+            <td>{{ log.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ log.nombreUsuario }}</td>
+            <td><span class="badge-categoria">{{ log.rol }}</span></td>
+            <td>{{ log.accion }}</td>
+          </tr>
+          <tr *ngIf="logs.length === 0">
+            <td colspan="4" style="text-align:center; color:#999; padding:40px">
+              No hay actividad registrada aún.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
