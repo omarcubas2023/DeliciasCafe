@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { CarritoService } from '../../services/carrito';
 import { PedidoService } from '../../services/pedido';
 import { AuthService } from '../../services/auth';
@@ -24,8 +25,11 @@ export class Carrito implements OnInit {
   // Modal de pago
   mostrarModal: boolean = false;
   metodoPago: string = 'efectivo';
+  numeroYape: string = '';
+  errorConfiguracionPago: boolean = false;
 
   constructor(
+    private http: HttpClient,
     private carritoService: CarritoService,
     private pedidoService: PedidoService,
     private authService: AuthService,
@@ -33,6 +37,19 @@ export class Carrito implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.http.get<{ yapePhone: string }>('/api/config/pagos').subscribe({
+      next: (config) => {
+        this.numeroYape = config.yapePhone || '';
+        this.errorConfiguracionPago = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.numeroYape = '';
+        this.errorConfiguracionPago = true;
+        this.cdr.detectChanges();
+      }
+    });
+
     this.carritoService.carrito$.subscribe(items => {
       this.items = items;
       this.total = this.carritoService.getTotal();
@@ -86,6 +103,14 @@ export class Carrito implements OnInit {
   // Confirma y envía el pedido
   confirmarPedido() {
     const usuario = this.authService.getUsuario();
+    if (this.metodoPago === 'yape' && !this.numeroYape) {
+      this.mensaje = this.errorConfiguracionPago
+        ? 'No fue posible consultar los datos de Yape. Intenta de nuevo más tarde.'
+        : 'El número Yape del negocio aún no está configurado.';
+      this.mensajeTipo = 'error';
+      this.cdr.detectChanges();
+      return;
+    }
     this.cargando = true;
 
     const pedido = {

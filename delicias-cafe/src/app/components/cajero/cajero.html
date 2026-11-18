@@ -10,6 +10,27 @@
     </div>
   </div>
 
+  <div class="sync-status" role="status" aria-live="polite">
+    <span *ngIf="vistaActiva === 'auditoria' && ultimaActualizacionAuditoria">
+      Auditoría sincronizada: {{ ultimaActualizacionAuditoria | date:'HH:mm:ss' }}.
+    </span>
+    <span *ngIf="vistaActiva !== 'auditoria' && ultimaActualizacion">
+      Pedidos compartidos actualizados: {{ ultimaActualizacion | date:'HH:mm:ss' }}.
+    </span>
+    <span *ngIf="(vistaActiva === 'auditoria' && !ultimaActualizacionAuditoria) ||
+      (vistaActiva !== 'auditoria' && !ultimaActualizacion)">
+      Sincronizando con el servidor...
+    </span>
+    <p class="sync-error"
+      *ngIf="(vistaActiva !== 'auditoria' && errorPedidos) || (vistaActiva === 'auditoria' && errorAuditoria)"
+      role="alert">
+      {{ vistaActiva === 'auditoria' ? errorAuditoria : errorPedidos }}
+    </p>
+    <p class="sync-error" *ngIf="errorConfiguracionPago" role="alert">
+      No se pudieron consultar los datos de Yape.
+    </p>
+  </div>
+
   <!-- Notificación flotante -->
   <div class="notificacion exito" *ngIf="mensaje && mensajeTipo === 'exito'">
     {{ mensaje }}
@@ -40,6 +61,7 @@
           <th>Cliente</th>
           <th>Total</th>
           <th>Método</th>
+          <th>Referencia</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
@@ -50,6 +72,7 @@
           <td>{{ pedido.nombreCliente || 'Cliente' }}</td>
           <td>S/ {{ pedido.total }}</td>
           <td>{{ pedido.metodoPago }}</td>
+          <td>{{ pedido.referenciaPago || '—' }}</td>
           <td>
             <span class="badge"
               [class.pagado]="pedido.estado === 'pagado'"
@@ -88,7 +111,7 @@
         <strong>{{ pedidosPagados }}</strong>
       </div>
       <div class="resumen-item">
-        <span>Ganancias totales</span>
+        <span>Ingresos del día</span>
         <strong>S/ {{ gananciasDia.toFixed(2) }}</strong>
       </div>
     </div>
@@ -150,6 +173,9 @@
           </div>
           <div class="detalle-pago">
             Pagado con <strong>{{ pedido.metodoPago }}</strong>
+            <span *ngIf="pedido.referenciaPago">
+              · Referencia: <strong>{{ pedido.referenciaPago }}</strong>
+            </span>
           </div>
         </div>
       </div>
@@ -162,7 +188,7 @@
   <div class="modal-pago" (click)="$event.stopPropagation()">
 
     <!-- PASO 1: Elegir método de pago -->
-    <div *ngIf="!mostrarVentanaCambio">
+    <div *ngIf="!mostrarVentanaCambio && !mostrarVentanaReferencia">
       <h2>¿Cómo paga el cliente?</h2>
       <p class="modal-subtitulo">
         Total del pedido #{{ pedidoSeleccionado?.id }}:
@@ -195,10 +221,57 @@
         </div>
       </div>
 
+      <p class="yape-cuenta" *ngIf="metodoPagoSeleccionado === 'yape' && numeroYape">
+        Número Yape del negocio: <strong>{{ numeroYape }}</strong>
+      </p>
+      <p class="modal-nota" *ngIf="metodoPagoSeleccionado === 'yape' && !numeroYape">
+        Número Yape del negocio no configurado.
+      </p>
+
       <div class="modal-acciones">
-        <button class="btn-cancelar-modal" (click)="cerrarModalPago()">Cancelar</button>
+        <button class="btn-cancelar-modal" (click)="cerrarModalPago()"
+          [disabled]="procesandoPago">Cancelar</button>
         <button class="btn-confirmar-modal" (click)="confirmarMetodoPago()">
           Continuar
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="mostrarVentanaReferencia">
+      <h2>Verificar pago con {{ iconoMetodo(metodoPagoSeleccionado) }}</h2>
+      <p class="modal-subtitulo">
+        Confirma que el pago de <strong>S/ {{ pedidoSeleccionado?.total }}</strong>
+        aparece en la cuenta receptora antes de registrarlo.
+      </p>
+      <p class="yape-cuenta" *ngIf="metodoPagoSeleccionado === 'yape' && numeroYape">
+        Número Yape del negocio: <strong>{{ numeroYape }}</strong>
+      </p>
+      <p class="modal-nota" *ngIf="metodoPagoSeleccionado === 'yape' && !numeroYape">
+        Número Yape del negocio no configurado.
+      </p>
+      <p class="modal-nota">
+        El sistema no verifica la transferencia automáticamente.
+      </p>
+      <div class="referencia-form">
+        <label for="referenciaPago">Número de operación o referencia</label>
+        <input
+          id="referenciaPago"
+          type="text"
+          [(ngModel)]="referenciaPago"
+          maxlength="100"
+          autocomplete="off"
+          placeholder="Ingresa el dato del comprobante"
+        />
+      </div>
+      <div class="modal-acciones">
+        <button class="btn-cancelar-modal"
+          (click)="mostrarVentanaReferencia = false">
+          Volver
+        </button>
+        <button class="btn-confirmar-modal"
+          (click)="confirmarPagoConReferencia()"
+          [disabled]="!referenciaPago.trim() || procesandoPago">
+          {{ procesandoPago ? 'Registrando...' : 'Confirmar Pago' }}
         </button>
       </div>
     </div>
@@ -252,8 +325,8 @@
         </button>
         <button class="btn-confirmar-modal"
           (click)="confirmarPagoEfectivo()"
-          [disabled]="montoPagadoCliente < +pedidoSeleccionado?.total">
-          Confirmar Pago
+          [disabled]="montoPagadoCliente < +pedidoSeleccionado?.total || procesandoPago">
+          {{ procesandoPago ? 'Registrando...' : 'Confirmar Pago' }}
         </button>
       </div>
     </div>

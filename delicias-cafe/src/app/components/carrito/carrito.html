@@ -94,10 +94,26 @@
 
     </div>
 
+    <div class="yape-instrucciones" *ngIf="metodoPago === 'yape'">
+      <ng-container *ngIf="numeroYape; else yapeSinConfigurar">
+        <p>Envía el total al siguiente número Yape del negocio:</p>
+        <strong>{{ numeroYape }}</strong>
+        <p>El pago quedará pendiente hasta que Caja lo verifique.</p>
+      </ng-container>
+      <ng-template #yapeSinConfigurar>
+        <p role="alert">
+          {{ errorConfiguracionPago
+            ? 'No fue posible consultar los datos de Yape. Intenta de nuevo más tarde.'
+            : 'El número Yape del negocio aún no está configurado.' }}
+        </p>
+      </ng-template>
+    </div>
+
     <!-- Botones -->
     <div class="modal-acciones">
       <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-      <button class="btn-confirmar" (click)="confirmarPedido()" [disabled]="cargando">
+      <button class="btn-confirmar" (click)="confirmarPedido()"
+        [disabled]="cargando || (metodoPago === 'yape' && !numeroYape)">
         {{ cargando ? 'Procesando...' : 'Confirmar Pedido' }}
       </button>
     </div>

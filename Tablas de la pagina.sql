@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
   fecha_pedido DATETIME NOT NULL,
   total DECIMAL(10,2) NOT NULL,
   estado VARCHAR(50) DEFAULT 'pendiente',
+  referencia_pago VARCHAR(100),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 -- ---------------------------------

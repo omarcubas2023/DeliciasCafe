@@ -25,8 +25,15 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/productos/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/pedidos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                .requestMatchers("/api/config/pagos").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/todos")
+                    .hasAnyRole("CAJERO", "ADMINISTRADOR", "COCINERO", "MESERO")
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/auditoria-pagos")
+                    .hasAnyRole("CAJERO", "ADMINISTRADOR")
+                .requestMatchers(HttpMethod.PUT, "/api/pedidos/*/estado")
+                    .hasAnyRole("CAJERO", "ADMINISTRADOR", "COCINERO", "MESERO")
+                .requestMatchers("/api/pedidos/**").authenticated()
                 .anyRequest().permitAll()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

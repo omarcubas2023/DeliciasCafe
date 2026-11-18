@@ -26,4 +26,7 @@ public class Pedido {
 
     @Column(name = "metodo_pago")
     private String metodoPago = "efectivo";
+
+    @Column(name = "referencia_pago")
+    private String referenciaPago;
 }

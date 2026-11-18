@@ -44,6 +44,17 @@
   font-size: 24px;
 }
 
+.sync-status {
+  margin: -16px 0 24px;
+  color: #6b5b4b;
+  font-size: 13px;
+}
+
+.sync-error {
+  margin: 6px 0 0;
+  color: #c0392b;
+}
+
 /* ===== TABS ===== */
 .tabs {
   display: flex;
@@ -312,6 +323,37 @@
   font-size: 12px;
   color: #8B6914;
   text-transform: capitalize;
+}
+
+.yape-cuenta {
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+  background: #f3e8ff;
+  color: #4b2675;
+  text-align: center;
+}
+
+.referencia-form {
+  margin: 20px 0 24px;
+}
+
+.referencia-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #8B6914;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.referencia-form input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #D0B090;
+  border-radius: 8px;
+  color: #3D1C02;
+  font-size: 16px;
 }
 
 /* ===== NOTIFICACIÓN FLOTANTE ===== */

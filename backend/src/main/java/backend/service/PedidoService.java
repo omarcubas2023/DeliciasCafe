@@ -7,7 +7,10 @@ import backend.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +34,7 @@ public class PedidoService {
         pedido.setMetodoPago(datos.get("metodo_pago") != null ?
             datos.get("metodo_pago").toString() : "efectivo");
         pedido.setEstado("pendiente");
-        pedido.setFechaPedido(LocalDateTime.now());
+        pedido.setFechaPedido(LocalDateTime.now(ZoneOffset.UTC));
 
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
 
@@ -62,17 +65,49 @@ public class PedidoService {
         return detallePedidoRepository.findByPedidoId(pedidoId);
     }
 
-    public List<Pedido> getTodosPedidos() {
-        return pedidoRepository.findAll();
+    public Pedido getPedido(Long id) {
+        return pedidoRepository.findById(id).orElse(null);
     }
 
-    public Pedido actualizarEstado(Long id, String estado, String metodoPago) {
-        Pedido pedido = pedidoRepository.findById(id).orElse(null);
-            if (pedido != null) {
-                pedido.setEstado(estado);
-                if (metodoPago != null && !metodoPago.isEmpty()) {
-                    pedido.setMetodoPago(metodoPago);
+    public List<Pedido> getPedidosDelDia() {
+        ZoneId lima = ZoneId.of("America/Lima");
+        LocalDate hoy = LocalDate.now(lima);
+        LocalDateTime desdeUtc = hoy.atStartOfDay(lima)
+            .withZoneSameInstant(ZoneOffset.UTC)
+            .toLocalDateTime();
+        LocalDateTime hastaUtc = hoy.plusDays(1).atStartOfDay(lima)
+            .withZoneSameInstant(ZoneOffset.UTC)
+            .toLocalDateTime();
+        return pedidoRepository
+            .findByFechaPedidoGreaterThanEqualAndFechaPedidoLessThanOrderByFechaPedidoDesc(
+                desdeUtc, hastaUtc);
+    }
+
+    @Transactional
+    public Pedido actualizarEstado(Long id, String estado, String metodoPago, String referenciaPago) {
+        if ("pagado".equals(estado)) {
+            if (metodoPago == null || metodoPago.isBlank()) {
+                throw new IllegalArgumentException("El método de pago es obligatorio.");
             }
+            if (!"efectivo".equals(metodoPago) &&
+                    (referenciaPago == null || referenciaPago.isBlank())) {
+                throw new IllegalArgumentException("La referencia de pago es obligatoria.");
+            }
+            String referencia = referenciaPago == null || referenciaPago.isBlank()
+                ? null
+                : referenciaPago.trim();
+            if (pedidoRepository.registrarPagoPendiente(id, metodoPago, referencia) == 0) {
+                if (!pedidoRepository.existsById(id)) {
+                    return null;
+                }
+                throw new IllegalStateException("El pedido ya fue procesado.");
+            }
+            return pedidoRepository.findById(id).orElse(null);
+        }
+
+        Pedido pedido = pedidoRepository.findById(id).orElse(null);
+        if (pedido != null) {
+            pedido.setEstado(estado);
             return pedidoRepository.save(pedido);
         }
         return null;
@@ -127,6 +162,7 @@ public class PedidoService {
             pedidoData.put("total", pedido.getTotal());
             pedidoData.put("estado", pedido.getEstado());
             pedidoData.put("metodoPago", pedido.getMetodoPago());
+            pedidoData.put("referenciaPago", pedido.getReferenciaPago());
             pedidoData.put("usuarioId", pedido.getUsuarioId());
 
             List<DetallePedido> detalles = detallePedidoRepository.findByPedidoId(pedido.getId());
